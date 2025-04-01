@@ -1,0 +1,97 @@
+﻿@model IEnumerable<MIS333K_FinalProject.Models.Property>
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    var adminName = ViewData["AdminName"]; // Retrieve the admin's full name from ViewData
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+<br />
+<h3>Hello @adminName!</h3>  <!-- Display the admin's name -->
+<h4>Welcome to Your Admin Dashboard!</h4>
+
+<hr />
+
+<div class="mt-4">
+    <a asp-controller="RoleAdmin" asp-action="Index" class="btn btn-primary">Manage Users</a>
+</div>
+
+<div class="mt-4">
+    <a asp-controller="Report" asp-action="AdminReport" class="btn btn-primary">Admin Report</a>
+</div>
+
+<div class="mt-4">
+    <a asp-controller="Category" asp-action="Index" class="btn btn-primary">Manage Categories</a>
+</div>
+
+<div class="mt-4">
+    <a asp-controller="Reservation" asp-action="Create" class="btn btn-primary">Manage Customer Reservations</a>
+</div>
+
+
+<hr />
+<h2>All Properties</h2>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Property Number</th>
+                <th>Status</th>
+                <th>Street Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zip Code</th>
+                <th># of Bedrooms</th>
+                <th># of Bathrooms</th>
+                <th># of Guests Allowed</th>
+                <th>Pets Allowed</th>
+                <th>Free Parking</th>
+                <th>Weekday Price</th>
+                <th>Weekend Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var property in Model)
+            {
+                <tr>
+                    <td>@property.PropertyId</td>
+                    <td>@property.PropertyStatus</td>
+                    <td>@property.Street</td>
+                    <td>@property.City</td>
+                    <td>@property.State</td>
+                    <td>@property.ZipCode</td>
+                    <td>@property.Bedrooms</td>
+                    <td>@property.Bathrooms</td>
+                    <td>@property.GuestsAllowed</td>
+                    <td>@property.PetsAllowed</td>
+                    <td>@property.FreeParking</td>
+                    <td>@property.WeekdayPrice.ToString("C")</td>
+                    <td>@property.WeekendPrice.ToString("C")</td>
+                    <td>
+                        <a asp-controller="Property" asp-action="Edit" asp-route-id="@property.PropertyId">Edit</a> |
+                        <a asp-controller="Property" asp-action="Details" asp-route-id="@property.PropertyId">Details</a> |
+                        @if (property.Reviews != null && property.Reviews.Any())
+                        {
+                            <a asp-controller="Review" asp-action="Index" asp-route-propertyId="@property.PropertyId">Manage Reviews</a>
+                        }
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>There are no properties listed.</p>
+}
+

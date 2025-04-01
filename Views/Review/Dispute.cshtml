@@ -1,0 +1,32 @@
+﻿@model MIS333K_FinalProject.Models.Review
+
+@{
+    ViewData["Title"] = "Dispute";
+}
+
+<h1>Dispute</h1>
+
+<h4>Review</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Dispute">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ReviewID" />
+            <div class="form-group">
+                <label asp-for="HostComments" class="control-label"></label>
+                <input asp-for="HostComments" class="form-control" />
+                <span asp-validation-for="HostComments" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-primary mt-3" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Home" asp-action="HostDash">Back to Dashboard</a>
+</div>
+

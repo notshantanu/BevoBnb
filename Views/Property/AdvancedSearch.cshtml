@@ -1,0 +1,121 @@
+@model MIS333K_FinalProject.ViewModels.PropertySearchViewModel
+
+<form method="post" asp-controller="Property" asp-action="AdvancedSearch">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <!-- City -->
+    <div class="form-group">
+        <label asp-for="City" class="control-label">City</label>
+        <input asp-for="City" class="form-control" placeholder="Enter city" />
+        <span asp-validation-for="City" class="text-danger"></span>
+    </div>
+
+    <!-- State -->
+    <div class="form-group">
+        <label for="state">State</label>
+        <select id="state" name="state">
+            <option value="">Select State</option>
+            <!-- Populate States Dynamically -->
+            @foreach (var state in Enum.GetValues(typeof(MIS333K_FinalProject.Models.StateAbbr)))
+            {
+                <option value="@state">@state</option>
+            }
+        </select>
+    </div>
+
+    <!-- Number of Guests -->
+    <div class="form-group">
+        <label asp-for="Guests" class="control-label">Number of Guests</label>
+        <input asp-for="Guests" class="form-control" type="number" placeholder="Enter number of guests" />
+        <span asp-validation-for="Guests" class="text-danger"></span>
+    </div>
+
+    <!-- Guest Rating -->
+    <div class="form-group">
+        <label>Guest Rating</label>
+        <div class="input-group">
+            <select asp-for="GuestRatingOperator" class="form-control">
+                <option value="GreaterThan">Greater Than</option>
+                <option value="LessThan">Less Than</option>
+            </select>
+            <input asp-for="AverageRating" class="form-control" placeholder="Enter rating" />
+        </div>
+        <span asp-validation-for="GuestRatingOperator" class="text-danger"></span>
+        <span asp-validation-for="AverageRating" class="text-danger"></span>
+    </div>
+
+    <!-- Price Range -->
+    <div class="form-group">
+        <label>Price Range</label>
+        <div class="input-group">
+            <input asp-for="MinDailyPrice" class="form-control" placeholder="Min Price" />
+            <input asp-for="MaxDailyPrice" class="form-control" placeholder="Max Price" />
+        </div>
+        <span asp-validation-for="MinDailyPrice" class="text-danger"></span>
+        <span asp-validation-for="MaxDailyPrice" class="text-danger"></span>
+    </div>
+
+    <!-- Category -->
+    <div class="form-group">
+        <label>Category:</label>
+        <select asp-for="CategoryId">
+            <option value="">Select a Category</option>
+            @foreach (var category in Model.Categories)
+            {
+                <option value="@category.CategoryId">@category.CategoryName</option>
+            }
+        </select>
+    </div>
+
+    <!-- Bedrooms -->
+    <div class="form-group">
+        <label asp-for="Bedrooms" class="control-label">Number of Bedrooms</label>
+        <input asp-for="Bedrooms" class="form-control" type="number" placeholder="Number of bedrooms" />
+        <span asp-validation-for="Bedrooms" class="text-danger"></span>
+    </div>
+
+    <!-- Bathrooms -->
+    <div class="form-group">
+        <label asp-for="Bathrooms" class="control-label">Number of Bathrooms</label>
+        <input asp-for="Bathrooms" class="form-control" type="number" placeholder="Number of bathrooms" />
+        <span asp-validation-for="Bathrooms" class="text-danger"></span>
+    </div>
+
+   <div class="form-group">
+        <label asp-for="PetsAllowed" class="control-label">Pets Allowed</label>
+        <input type="checkbox"
+               class="form-check-input"
+               name="PetsAllowed"
+               value="true"
+               @(Model.PetsAllowed == true ? "checked" : "") />
+        <span asp-validation-for="PetsAllowed" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FreeParking" class="control-label">Free Parking</label>
+        <input type="checkbox"
+               class="form-check-input"
+               name="FreeParking"
+               value="true"
+               @(Model.FreeParking == true ? "checked" : "") />
+        <span asp-validation-for="FreeParking" class="text-danger"></span>
+    </div>
+
+<!-- Check-in Date -->
+    <div class="form-group">
+        <label asp-for="CheckInDate" class="control-label">Check-in Date</label>
+        <input asp-for="CheckInDate" class="form-control" type="date" />
+        <span asp-validation-for="CheckInDate" class="text-danger"></span>
+    </div>
+
+    <!-- Check-out Date -->
+    <div class="form-group">
+        <label asp-for="CheckOutDate" class="control-label">Check-out Date</label>
+        <input asp-for="CheckOutDate" class="form-control" type="date" />
+        <span asp-validation-for="CheckOutDate" class="text-danger"></span>
+    </div>
+
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary mt-3">Search</button>
+</form>

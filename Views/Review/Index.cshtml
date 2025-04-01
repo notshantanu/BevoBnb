@@ -1,0 +1,93 @@
+@model IEnumerable<MIS333K_FinalProject.Models.Review>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+@if (User.Identity.IsAuthenticated)
+{
+    @if (User.IsInRole("Host"))
+    {
+        <div>
+            <a asp-controller="Home" asp-action="HostDash">Back to Dashboard</a>
+        </div>
+    }
+}
+@if (User.Identity.IsAuthenticated)
+{
+    @if (User.IsInRole("Admin"))
+    {
+        <div>
+            <a asp-controller="Home" asp-action="AdminDash">Back to Dashboard</a>
+        </div>
+    }
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PropertyNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReviewText)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HostComments)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DisputeStatus)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PropertyNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerEmail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rating)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReviewText)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HostComments)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DisputeStatus)
+                </td>
+                <td>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (User.IsInRole("Host") & item.DisputeStatus == MIS333K_FinalProject.Models.DisStatus.NoDispute)
+                        {
+                            <a asp-action="Dispute" asp-route-id="@item.ReviewID">Dispute Review</a>
+                        }
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (User.IsInRole("Admin") & item.DisputeStatus == MIS333K_FinalProject.Models.DisStatus.Disputed)
+                        {
+                            <a asp-action="ManageDispute" asp-route-id="@item.ReviewID">Manage Dispute</a>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

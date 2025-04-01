@@ -1,0 +1,67 @@
+@model IEnumerable<Reservation>
+
+<h2>Your Cart</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-warning" role="alert">
+        There are no reservations in your cart. Add some reservations to get started!
+    </div>
+    <div>
+        <a asp-controller="Property" asp-action="Index" class="btn btn-primary mt-3">Make a New Reservation</a>
+    </div>
+}
+else
+{
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger" role="alert">
+            @TempData["Error"]
+        </div>
+    }
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["Message"]
+        </div>
+    }
+
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Property</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Guests</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Property.Street</td>
+                    <td>@item.StartDate.ToShortDateString()</td>
+                    <td>@item.EndDate.ToShortDateString()</td>
+                    <td>@item.NumOfGuests</td>
+                    <td>@item.Total.ToString("C")</td>
+                    <td>
+                        <!-- Checkout Button -->
+                        <form asp-action="Checkout" asp-controller="Reservation" method="get" style="display: inline;">
+                            <input type="hidden" name="id" value="@item.ReservationID" />
+                            <button type="submit" class="btn btn-primary">Checkout</button>
+                        </form>
+
+                        <!-- Remove Button -->
+                        <form asp-action="Remove" asp-controller="Reservation" method="post" style="display: inline;">
+                            <input type="hidden" name="id" value="@item.ReservationID" />
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

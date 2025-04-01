@@ -1,0 +1,62 @@
+﻿@model MIS333K_FinalProject.Models.AdminReportViewModel
+
+@{
+    ViewData["Title"] = "Admin Reports";
+}
+
+<h1>Admin Reports</h1>
+
+<div>
+    <h4>Overall Platform Statistics</h4>
+    <hr />
+    <form method="get" asp-action="AdminReport">
+        <div class="row">
+            <!-- Date Range Filter -->
+            <div class="col-md-4">
+                <label for="StartDate">Start Date</label>
+                <input type="date" id="StartDate" name="StartDate" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label for="EndDate">End Date</label>
+                <input type="date" id="EndDate" name="EndDate" class="form-control" />
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </form>
+
+    <br />
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Total Commission Earned</th>
+                <th>Total Reservations</th>
+                <th>Average Commission per Reservation</th>
+                <th>Total Properties</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                <tr>
+                    <td>@Model.TotalCommissionEarned.ToString("C")</td>
+                    <td>@Model.TotalReservations</td>
+                    <td>@Model.AverageCommissionPerReservation.ToString("C")</td>
+                    <td>@Model.TotalProperties</td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4" class="text-center">No data available for the selected date range.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <a asp-controller="Home" asp-action="AdminDash">Back to Dashboard</a>
+</div>

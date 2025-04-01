@@ -1,0 +1,84 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title BevoBNB </title>
+    <link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+</head>
+<body>
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-content" aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="nav-content">
+                <img src="~/images/logo1.png" alt="Logo" style="height: 65px; width: 65px; margin-right: 5px; margin-left: 5px; border-radius: 25%;" />
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a asp-controller="Property" asp-action="Index" class="nav-link">Properties</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-controller="Home" asp-action="AboutUs" class="nav-link">About Us</a>
+                    </li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (User.IsInRole("Customer"))
+                        {
+                            <li class="nav-item">
+                                <a asp-controller="Home" asp-action="CustomerDash" class="nav-link">Dashboard</a>
+                            </li>
+                        }
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (User.IsInRole("Host"))
+                        {
+                            <li class="nav-item">
+                                <a asp-controller="Home" asp-action="HostDash" class="nav-link">Dashboard</a>
+                            </li>
+                        }
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a asp-controller="Home" asp-action="AdminDash" class="nav-link">Dashboard</a>
+                            </li>
+                        }
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (User.IsInRole("Customer"))
+                        {
+                            <li class="nav-item">
+                                <a asp-controller="Reservation" asp-action="Cart" class="nav-link">
+                                    <i class="bi bi-cart"></i> Cart
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+            @await Html.PartialAsync("_LoginPartial")
+        </nav>
+    </div>
+
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/popper.js/popper.js"></script>
+    <script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

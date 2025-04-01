@@ -1,0 +1,91 @@
+@model MIS333K_FinalProject.Models.Property
+
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Property</h4>
+<hr />
+
+<div>
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label asp-for="Street"></label>
+            <input asp-for="Street" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="City"></label>
+            <input asp-for="City" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="State" class="control-label"></label>
+            <select asp-for="State" class="form-control" asp-items="ViewBag.AllStates">
+                <option value="">Select State</option>
+            </select>
+            <span asp-validation-for="State" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ZipCode"></label>
+            <input asp-for="ZipCode" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Bedrooms"></label>
+            <input asp-for="Bedrooms" type="number" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Bathrooms"></label>
+            <input asp-for="Bathrooms" type="number" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="GuestsAllowed"></label>
+            <input asp-for="GuestsAllowed" type="number" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="PetsAllowed"></label>
+            <input asp-for="PetsAllowed" type="checkbox" class="form-check-input" />
+        </div>
+        <div class="form-group">
+            <label asp-for="FreeParking"></label>
+            <input asp-for="FreeParking" type="checkbox" class="form-check-input" />
+        </div>
+        <div class="form-group">
+            <label asp-for="WeekdayPrice"></label>
+            <input asp-for="WeekdayPrice" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="WeekendPrice"></label>
+            <input asp-for="WeekendPrice" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="CleaningFee"></label>
+            <input asp-for="CleaningFee" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="DiscountRate"></label>
+            <input asp-for="DiscountRate" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="MinNightsForDiscount"></label>
+            <input asp-for="MinNightsForDiscount" type="number" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Category.CategoryId" class="control-label"></label>
+            <select asp-for="Category.CategoryId" class="form-control" asp-items="ViewBag.AllCategories">
+                <option value="">Select Category</option>
+            </select>
+            <span asp-validation-for="Category.CategoryId" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Create</button>
+    </form>
+</div>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+<br />

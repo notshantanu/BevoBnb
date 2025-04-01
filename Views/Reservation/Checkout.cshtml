@@ -1,0 +1,60 @@
+@model MIS333K_FinalProject.Models.Reservation
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<h1>Reservation Checkout</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h4>Reservation Summary</h4>
+                <hr />
+                <dl class="row">
+                    <dt class="col-sm-4">Check-in Date:</dt>
+                    <dd class="col-sm-8">@Model.StartDate.ToShortDateString()</dd>
+
+                    <dt class="col-sm-4">Check-out Date:</dt>
+                    <dd class="col-sm-8">@Model.EndDate.ToShortDateString()</dd>
+
+                    <dt class="col-sm-4">Number of Guests:</dt>
+                    <dd class="col-sm-8">@Model.NumOfGuests</dd>
+
+                    <dt class="col-sm-4">Location:</dt>
+                    <dd class="col-sm-8">@Model.Property.City, @Model.Property.State</dd>
+
+                    <dt class="col-sm-4">Stay Price:</dt>
+                    <dd class="col-sm-8">@(((Model.Total / (1 + 0.07m))-(Model.CleaningFee)).ToString("C"))</dd>
+
+                    <dt class="col-sm-4">Cleaning Fee:</dt>
+                    <dd class="col-sm-8">@Model.CleaningFee.ToString("C")</dd>
+
+                    @if (Model.DiscountRate > 0)
+                    {
+                        <dt class="col-sm-4">Discount:</dt>
+                        <dd class="col-sm-8">@((Model.DiscountRate * 100).ToString("F0"))% after @Model.Property.MinNightsForDiscount Nights</dd>
+                    }
+
+                    <dt class="col-sm-4">Subtotal:</dt>
+                    <dd class="col-sm-8">@((Model.Total / (1 + 0.07m)).ToString("C"))</dd>
+
+                    <dt class="col-sm-4">Tax (7%):</dt>
+                    <dd class="col-sm-8">@((Model.Total - (Model.Total / (1 + 0.07m))).ToString("C"))</dd>
+
+                    <dt class="col-sm-4"><strong>Grand Total:</strong></dt>
+                    <dd class="col-sm-8"><strong>@Model.Total.ToString("C")</strong></dd>
+                </dl>
+
+                <form asp-action="Checkout" method="post">
+                    <input type="hidden" asp-for="ReservationID" />
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Confirm Reservation</button>
+                        <a asp-action="Cart" class="btn btn-secondary">Back to Cart</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

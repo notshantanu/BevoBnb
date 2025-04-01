@@ -1,0 +1,191 @@
+﻿@model IEnumerable<MIS333K_FinalProject.Models.Reservation>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+@{
+    ViewData["Title"] = "Customer Dashboard";
+    var customerName = ViewData["CustomerName"]; // Retrieve the full name from ViewData
+    var today = DateTime.Now; // Current date
+    var tomorrow= today.AddDays(1);
+
+    // Separate reservations into upcoming and past lists
+    var upcomingReservations = new List<MIS333K_FinalProject.Models.Reservation>();
+    var pastReservations = new List<MIS333K_FinalProject.Models.Reservation>();
+    var cancelledReservations = new List<MIS333K_FinalProject.Models.Reservation>();
+
+
+    foreach (var reservation in Model)
+    {
+        if (reservation.ReservationStatus == ResStatus.Cancelled)
+        {
+            cancelledReservations.Add(reservation);
+        }
+        else
+        {
+            if (reservation.StartDate > tomorrow)
+            {
+                upcomingReservations.Add(reservation);
+            }
+            else
+            {
+                pastReservations.Add(reservation);
+            }
+        }
+
+    }
+
+    // Get the list of reviews from ViewBag (passed from the controller)
+    var reviews = (List<MIS333K_FinalProject.Models.Review>)ViewBag.Reviews;
+}
+
+<br />
+<h2>Hello @customerName!</h2>
+<h3>Welcome to Your Dashboard.</h3>
+
+
+<div class="mt-4">
+    <a asp-controller="Account" asp-action="ChangePassword" class="btn btn-primary">Change Password</a>
+</div>
+
+<hr />
+<h4>Upcoming Reservations</h4>
+
+@if (upcomingReservations.Any())
+{
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Confirmation Number</th>
+                <th>Address</th>
+                <th>Check-In Date</th>
+                <th>Check-Out Date</th>
+                <th>Total Cost</th>
+                <th>Cancellation</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reservation in upcomingReservations)
+            {
+                <tr>
+                    <td>@reservation.ConfirmationNumber.ToString()</td>
+                    <td>@reservation.Property.Street, @reservation.Property.City, @reservation.Property.State @reservation.Property.ZipCode</td>
+                    <td>@reservation.StartDate.ToShortDateString()</td>
+                    <td>@reservation.EndDate.ToShortDateString()</td>
+                    <td>@reservation.Total.ToString("C")</td>
+                    <td>
+                        <form asp-controller="Reservation" asp-action="Cancel">
+                            <input type="hidden" name="resId" value="@reservation.ReservationID" />
+                            <button type="submit" class="btn btn-danger">Cancel</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>You have no upcoming reservations.</p>
+}
+
+<h4>Current & Past Reservations</h4>
+
+@if (pastReservations.Any())
+{
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Confirmation Number</th>
+                <th>Address</th>
+                <th>Check-In Date</th>
+                <th>Check-Out Date</th>
+                <th>Total Cost</th>
+                <th>Review</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reservation in pastReservations)
+            {
+                // Check if a review exists for the current reservation's property
+                var review = reviews.FirstOrDefault(r => r.PropertyNumber == reservation.Property.PropertyId);
+
+                if (review == null)
+                {
+                    // Display the "Leave a Review" button if no review exists
+                    <tr>
+                        <td>@reservation.ConfirmationNumber.ToString()</td>
+                        <td>@reservation.Property.Street, @reservation.Property.City, @reservation.Property.State @reservation.Property.ZipCode</td>
+                        <td>@reservation.StartDate.ToShortDateString()</td>
+                        <td>@reservation.EndDate.ToShortDateString()</td>
+                        <td>@reservation.Total.ToString("C")</td>
+                        <td>
+                            <a asp-controller="Review" asp-action="Create" asp-route-propId="@reservation.Property.PropertyId" class="btn btn-primary">Leave a Review</a>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    // Display the "View/Edit Review" link if a review exists
+                    <tr>
+                        <td>@reservation.ConfirmationNumber.ToString()</td>
+                        <td>@reservation.Property.Street, @reservation.Property.City, @reservation.Property.State @reservation.Property.ZipCode</td>
+                        <td>@reservation.StartDate.ToShortDateString()</td>
+                        <td>@reservation.EndDate.ToShortDateString()</td>
+                        <td>@reservation.Total.ToString("C")</td>
+                        <td>
+                            <a asp-controller="Review" asp-action="Edit" asp-route-id="@review.ReviewID" class="btn btn-primary">View/Edit Review</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>You have no past reservations.</p>
+}
+
+<h4>Cancelled Reservations</h4>
+
+@if (cancelledReservations.Any())
+{
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Confirmation Number</th>
+                <th>Address</th>
+                <th>Check-In Date</th>
+                <th>Check-Out Date</th>
+                <th>Total Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reservation in cancelledReservations)
+            {
+                <tr>
+                    <td>@reservation.ConfirmationNumber.ToString()</td>
+                    <td>@reservation.Property.Street, @reservation.Property.City, @reservation.Property.State @reservation.Property.ZipCode</td>
+                    <td>@reservation.StartDate.ToShortDateString()</td>
+                    <td>@reservation.EndDate.ToShortDateString()</td>
+                    <td>@reservation.Total.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>You have no cancelled reservations.</p>
+}
+
+<div class="mt-4">
+    <a asp-controller="Property" asp-action="Index" class="btn btn-primary">Make a New Reservation</a>
+</div>
+
+<br/>

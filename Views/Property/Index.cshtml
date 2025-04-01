@@ -1,0 +1,246 @@
+@model IEnumerable<MIS333K_FinalProject.Models.Property>
+
+@{
+    ViewData["Title"] = "Property Listings - ";
+
+    // List of Image URLs
+    var propertyImages = new List<string>
+{
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSZpBgJ9dEXAvv0ofaG1xyAE9mNv-iGxGOvA&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIW4Y1zlQUq3K91-pLVcp5arqNeZdp4x4sgQ&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZsS17xfGVINVOrMG9og-MxGw_U2MukFgP6g&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRorbxGCh_eHspzTgplBwiB0WsXjqQm4wCkAw&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRecb7o5_zgsXiK_AH7KhapwW8CtEYvDoggew&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ34cTZLZrOk1foUuAauiGPFpSFW5VbnxGMCg&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqD3R0_JLATrvQkKdOxI5b4x35vAVK2IO-Qw&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ54cCFLWXrOvPZWraKoWVcyg1pHT5ybUuj0Q&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ02kBhGYxHNV-jC4zPSIHwiv16yIACGGd0-g&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOjKAYlTun3bEWYMeDYf78YZF7dXzQoA3K9Q&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-7tRSyavXGFygkHKF1LGoWbK8YKJ4R2lMIw&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQezuY5SUf246FS-FqUvpKl_br2qXyyjzNiYw&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLFogcP75SuL-5mnqMDdW_GjDxBEZJCTqIhA&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnpi_zVzA5CYvh47bE2wpSSCvraqdO4FAhzg&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyqIcX-aCAf20BbzSuKQxLlYqiXfUXME3UtA&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSW7C68e3W6N2fGF2mXrwKRAlsjbqDuAq3QuA&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyvGXBy4MFY8KVgHxsQFRBAVsFdiu_YZrkxA&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSl9RAEfc7gwHwWU6QsyhYIJq7PFEJudUcfsQ&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrKEuimsuPFESrdUGpB3YeD3MtuZkeffyP5w&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2ApG2QZewp8HQkOrNra2ONYyREWxffqiiGA&s",
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3elqpN7zP_vtaqaVawzsgUvUUBHfz9f3Zag&s"
+    };
+}
+
+<div class="container-fluid position-relative text-white text-center p-0 mb-4">
+    <img src="~/images/resort.jpg" alt="Banner" class="img-fluid w-100" style="height: 60vh; object-fit: cover; margin: 0;">
+    <!-- Black overlay -->
+    <div style="background-color: rgba(0, 0, 0, 0.6); position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
+    <div class="position-absolute top-50 start-50 translate-middle" style="color: #f8f9fa; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); z-index: 1;">
+        <h1 class="fw-bold">BevoBNB Has Got You Covered</h1>
+        <p class="lead">Find the perfect getaway for you</p>
+    </div>
+</div>
+
+
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    @if (User.IsInRole("Host"))
+    {
+        <p>
+            <a asp-action="Create">Create New Listing</a>
+        </p>
+    }
+}
+
+
+<!DOCTYPE html>
+<HTML lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Bar</title>
+    <style>
+        /* General styling for the search bar */
+        .airbnb-search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 20px;
+            background-color: #f7f7f7;
+            border-radius: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            justify-content: center; /* Center content */
+            justify-self: center
+        }
+
+        /* Styling for input groups */
+        .input-group {
+            flex: 1;
+            min-width: 50px;
+            border-radius: 100px;
+        }
+
+        .search-bar label {
+            font-size: 0.8rem;
+            color: #050505;
+            margin-bottom: 0.3rem;
+            font-weight: bold
+        }
+
+        .search-bar input, .search-bar select {
+            border: 1px solid #ddd;
+            padding: 0.6rem;
+            font-size: 0.9rem;
+            width: 100%;
+            color: #808080; /* Set text color to gray */
+            box-sizing: border-box;
+        }
+
+        /* Styling for the search button */
+        .btn-search {
+            background-color: #e95420; /* Airbnb's primary color */
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 10px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+            justify-content: center;
+        }
+
+        .detailed-search-container {
+            margin-top: 20px;
+        }
+
+            .detailed-search-container .btn-secondary {
+                background-color: #6c757d;
+                color: white;
+                border: none;
+                border-radius: 15px;
+                padding: 10px 20px;
+                font-size: 16px;
+                font-weight: bold;
+                transition: background-color 0.3s;
+            }
+
+                .detailed-search-container .btn-secondary:hover {
+                    background-color: #5a6268;
+                }
+
+        .btn-search:hover {
+            background-color: #bd451b; /* Darker shade for hover */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="search-bar">
+        <form method="get" asp-controller="Property" asp-action="Index" class="airbnb-search-form">
+            <div class="input-group">
+                <label for="city" class="search-label">City</label>
+                <input type="text" id="city" name="city" placeholder="Search destinations" class="search-input">
+            </div>
+
+            <div class="input-group">
+                <label for="state" class="search-label">State</label>
+                <select id="state" name="state" class="search-input">
+                    <option value="">Select State</option>
+                    @foreach (var state in Enum.GetValues(typeof(MIS333K_FinalProject.Models.StateAbbr)))
+                    {
+                        <option value="@state">@state</option>
+                    }
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="guests" class="search-label">Minimum # of Guests</label>
+                <input type="number" id="guests" name="guests" placeholder="Number of guests" class="search-input" min="1">
+            </div>
+
+
+            <div class="input-group search-button">
+                <button type="submit" class="btn-search">
+                    Search <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+
+<div class="d-flex justify-content-center mt-3">
+    <a asp-controller="Property" asp-action="AdvancedSearch" class="btn btn-primary" style="width: 200px;">Advanced Search Filters</a>
+</div>
+
+
+<!-- Display X of X Section -->
+<div class="d-flex justify-content-center mt-3">
+    <p>Displaying @ViewBag.SelectedProperties out of @ViewBag.AllProperties Properties</p>
+</div>
+
+
+
+<!-- Property Listings -->
+<div class="row">
+    @foreach (var item in Model.Select((value, index) => new { value, index }))
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card property-card">
+                <!-- Assign image based on the index and cycle through the images using modulo -->
+                <img src="@propertyImages[item.index % propertyImages.Count]" class="card-img-top property-image" alt="Property Image">
+                <div class="card-body">
+                    <h5 class="card-title">@item.value.Street</h5>
+                    <p class="card-text">
+                        <strong>City:</strong> @item.value.City <br />
+                        <strong>State:</strong> @item.value.State <br />
+                        <strong>Category:</strong> @item.value.Category.CategoryName <br />
+                        <strong>Price:</strong> $@item.value.WeekdayPrice / night <br />
+                        <strong>Bedrooms:</strong> @item.value.Bedrooms <br />
+                        <strong>Bathrooms:</strong> @item.value.Bathrooms <br />
+                        <strong>Rating:</strong> @Math.Round(item.value.AverageRating, 1) <br />
+                    </p>
+                    <a href="@Url.Action("Details", "Property", new { id = item.value.PropertyId })" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    /* Styling for property cards */
+    .property-card {
+        background-color: #f7f7f7;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06); /* Add subtle shadow */
+        transition: transform 0.2s, box-shadow 0.2s; /* Smooth hover effect */
+    }
+
+        .property-card:hover {
+            transform: translateY(-15px); /* Slight lift on hover */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.12); /* Increase shadow on hover */
+        }
+
+    /* Styling for the card title */
+    .card-title {
+        font-weight: bold; /* Bold text for titles */
+        font-size: 1.25rem; /* Optional: Increase font size slightly */
+    }
+
+    /* Ensure all property images have the same dimensions */
+    .property-image {
+        width: 100%; /* Stretch image across the full width of the card */
+        height: 250px; /* Fixed height for consistency */
+        object-fit: cover; /* Maintain aspect ratio, crop if necessary */
+        border-top-left-radius: 8px; /* Match card corner radius */
+        border-top-right-radius: 8px; /* Match card corner radius */
+    }
+</style>
+
+
+</HTML>

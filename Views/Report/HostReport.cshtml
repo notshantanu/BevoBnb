@@ -1,0 +1,67 @@
+﻿@model IEnumerable<MIS333K_FinalProject.Models.HostReportViewModel>
+
+@{
+    ViewData["Title"] = "Host Reports";
+}
+
+<h1>Host Reports</h1>
+
+<div>
+    <h4>Properties Report</h4>
+    <hr />
+    <form method="get" asp-action="HostReports">
+        <div class="row">
+            <!-- Date Range Filter -->
+            <div class="col-md-4">
+                <label for="StartDate">Start Date</label>
+                <input type="date" id="StartDate" name="StartDate" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label for="EndDate">End Date</label>
+                <input type="date" id="EndDate" name="EndDate" class="form-control" />
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </form>
+
+    <br />
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Property Name</th>
+                <th>Total Stay Revenue</th>
+                <th>Total Cleaning Fees</th>
+                <th>Total Combined Revenue</th>
+                <th>Total Completed Reservations</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var report in Model)
+                {
+                    <tr>
+                        <td>@report.PropertyName</td>
+                        <td>@report.TotalStayRevenue.ToString("C")</td>
+                        <td>@report.TotalCleaningFees.ToString("C")</td>
+                        <td>@report.TotalCombinedRevenue.ToString("C")</td>
+                        <td>@report.TotalCompletedReservations</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="text-center">No data available for the selected date range.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <a asp-controller="Home" asp-action="HostDash">Back to Dashboard</a>
+</div>
